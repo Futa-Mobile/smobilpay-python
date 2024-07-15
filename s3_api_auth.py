@@ -20,9 +20,13 @@ class HMACSignature:
 
     def get_base_string(self):
         glue = '&'
+        #Sort the parameters
         sorted_params = sorted(self.params.items())
-        param_str = parse.urlencode(sorted_params, quote_via=parse.quote)
-        return f"{self.method.upper().strip()}{glue}{parse.quote_plus(self.url.strip())}{glue}{parse.quote_plus(param_str)}"
+        # Construct the parameter string
+        parameter_string = "&".join(f"{key}={str(value)}" for key, value in sorted_params)
+        #Generate and return the base string
+        return f"{self.method.upper()}{glue}{parse.quote(self.url, safe='-')}{glue}{parse.quote(parameter_string, safe='-')}"
+
 
 class S3ApiAuth:
     def __init__(self, api_url, public_token, secret_key):
@@ -36,12 +40,6 @@ class S3ApiAuth:
             print(f"Initialized API URL: {self.api_url}")
             print(f"Using public token: {self.public_token}")
 
-    def generate_nonce(self):
-        nonce = str(uuid.uuid4())
-        if self.debug:
-            print(f"Generated Nonce: {nonce}")
-        return nonce
-
     def timestamp(self):
         timestamp = str(int(time.time()))
         if self.debug:
@@ -49,7 +47,7 @@ class S3ApiAuth:
         return timestamp
 
     def create_authorization_header(self, method, additional_params=None):
-        nonce = self.generate_nonce()
+        nonce = self.timestamp()
         timestamp = self.timestamp()
         parameters = {
             's3pAuth_nonce': nonce,
@@ -76,7 +74,8 @@ class S3ApiAuth:
 
         headers = {
             'Authorization': self.create_authorization_header(method, additional_params),
-            'x-api-version': version
+            'x-api-version': version,
+            'Content-Type': 'application/json'
         }
 
         try:

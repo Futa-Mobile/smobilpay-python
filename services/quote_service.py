@@ -13,21 +13,18 @@ class QuoteService:
         self.base_url = f"{self.config.get_api_url()}/quotestd"
         self.api_auth = S3ApiAuth(self.base_url, self.public_token, self.secret_key)
 
-        # Set logging level based on configuration
-        logging_level = logging.DEBUG if self.config.debug_enabled else logging.INFO
-        logging.basicConfig(level=logging_level, format='%(asctime)s - %(levelname)s - %(message)s')
         logging.debug(f"Service initialized with base URL: {self.base_url}")
 
     def request_quote(self, payment_item_id, amount):
-        headers = self.api_auth.create_authorization_header('POST')
-        headers.update({
-            'x-api-version': self.api_version,
-            'Content-Type': 'application/json'
-        })
         payload = {
             'amount': amount,
             'payItemId': payment_item_id
         }
+        headers = ({
+            'Authorization': self.api_auth.create_authorization_header('POST', payload),
+            'x-api-version': self.api_version,
+            'Content-Type': 'application/json'
+        })
         logging.debug(f"Requesting quote with payload: {payload}")
         return self._make_request(payload, headers)
 
@@ -42,7 +39,7 @@ class QuoteService:
                 logging.error("Request could not be authenticated: %s", response.text)
                 return "Request could not be authenticated."
             else:
-                logging.error("An unexpected error occurred with status code: %s", response.status_code)
+                logging.error("An error occurred with status code: %s and payload %s", response.status_code, response.content)
                 return "An unexpected error occurred."
         except requests.RequestException as e:
             logging.error("Network error occurred: %s", str(e))

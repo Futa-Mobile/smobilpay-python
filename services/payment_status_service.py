@@ -20,15 +20,17 @@ class PaymentStatusService:
         if not ptn and not trid:
             logging.error("PTN or TRID must be provided.")
             return "PTN or TRID must be provided."
-        headers = {
-            'Authorization': self.api_auth.create_authorization_header('GET'),
-            'x-api-version': self.api_version
-        }
+        
         params = {}
         if ptn:
             params['ptn'] = ptn
         if trid:
             params['trid'] = trid
+
+        headers = {
+            'Authorization': self.api_auth.create_authorization_header('GET', params),
+            'x-api-version': self.api_version
+        }
 
         return self._make_request(params, headers)
 
@@ -37,7 +39,8 @@ class PaymentStatusService:
             response = requests.get(self.base_url, headers=headers, params=params)
             if response.status_code == 200:
                 try:
-                    return PaymentStatusModel(**response.json())
+                    payment_status =response.json()
+                    return [PaymentStatusModel(**status) for status in payment_status]
                 except KeyError as e:
                     logging.error(f"Key error during model instantiation: {str(e)}")
                     return f"Data parsing error: {str(e)}"

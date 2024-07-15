@@ -17,15 +17,17 @@ class SubscriptionService:
         self.api_auth = S3ApiAuth(self.base_url, self.public_token, self.secret_key)
 
     def fetch_subscriptions(self, merchant: str, service_id: int , service_number=None, customer_number=None):
-        headers = {
-            'Authorization': self.api_auth.create_authorization_header('GET'),
-            'x-api-version': self.api_version
-        }
         params = {
             'merchant': merchant,
-            'serviceid': service_id,
-            'serviceNumber': service_number,
-            'customerNumber': customer_number
+            'serviceid': service_id
+        }
+        if customer_number:
+            params['customerNumber'] = customer_number
+        if service_number:
+            params['serviceNumber'] = service_number
+        headers = {
+            'Authorization': self.api_auth.create_authorization_header('GET', params),
+            'x-api-version': self.api_version
         }
         return self._make_request(params, headers)
 
@@ -39,7 +41,7 @@ class SubscriptionService:
                 logging.error("Request could not be authenticated: %s", response.text)
                 return "Request could not be authenticated."
             else:
-                logging.error("An error occurred with status code: %s", response.status_code)
+                logging.error("An error occurred with status code: %s and payload %s", response.status_code, response.content)
                 return "An error occurred."
         except requests.RequestException as e:
             logging.error("Network error occurred: %s", str(e))

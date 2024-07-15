@@ -130,3 +130,6 @@ dmypy.json
 
 # IDEA
 .idea
+
+#Files to test the client
+tests/

@@ -17,10 +17,6 @@ class PaymentHistoryService:
         self.api_auth = S3ApiAuth(self.base_url, self.public_token, self.secret_key)
 
     def fetch_payment_history(self, timestamp_from=None, timestamp_to=None):
-        headers = {
-            'Authorization': self.api_auth.create_authorization_header('GET'),
-            'x-api-version': self.api_version
-        }
         params = {}
         if timestamp_from:
             try:
@@ -34,6 +30,10 @@ class PaymentHistoryService:
             except AttributeError:
                 logging.error("Invalid type for timestamp_to. It must be a datetime object.")
                 return "Invalid timestamp_to provided."
+        headers = {
+            'Authorization': self.api_auth.create_authorization_header('GET', params),
+            'x-api-version': self.api_version
+        }
 
         return self._make_request(params, headers)
 
@@ -47,8 +47,9 @@ class PaymentHistoryService:
                 logging.error("Request could not be authenticated: %s", response.text)
                 return "Request could not be authenticated."
             else:
-                logging.error("An unexpected error occurred with status code: %s", response.status_code)
+                logging.error("An error occurred with status code: %s and payload %s", response.status_code, response.content)
                 return "An unexpected error occurred."
+            
         except requests.RequestException as e:
             logging.error("Network error occurred: %s", str(e))
             return f"Network error occurred: {str(e)}"

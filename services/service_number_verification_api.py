@@ -23,7 +23,7 @@ class ServiceNumberVerificationApi:
     def verify_service_number(self, merchant, service_id: int, service_number):
         params = {'merchant': merchant, 'serviceid': service_id, 'serviceNumber': service_number}
         headers = {
-            'Authorization': self.api_auth.create_authorization_header('GET'),
+            'Authorization': self.api_auth.create_authorization_header('GET', params),
             'x-api-version': self.api_version
         }
         return self._make_request(params, headers)

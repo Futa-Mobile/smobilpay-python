@@ -18,11 +18,11 @@ class TopupService:
         self.api_auth = S3ApiAuth(self.base_url, self.public_token, self.secret_key)
 
     def fetch_topups(self, service_id: int = None):
+        params = {'serviceid': service_id} if service_id is not None else {}
         headers = {
-            'Authorization': self.api_auth.create_authorization_header('GET'),
+            'Authorization': self.api_auth.create_authorization_header('GET', params),
             'x-api-version': self.api_version
         }
-        params = {'serviceid': service_id} if service_id is not None else {}
         return self._make_request(params, headers)
 
     def _make_request(self, params, headers):
@@ -35,7 +35,7 @@ class TopupService:
                 logging.error("Request could not be authenticated: %s", response.text)
                 return "Request could not be authenticated."
             else:
-                logging.error("An error occurred with status code: %s", response.status_code)
+                logging.error("An error occurred with status code: %s and payload %s", response.status_code, response.content)
                 return "An error occurred."
         except requests.RequestException as e:
             logging.error("Network error occurred: %s", str(e))
