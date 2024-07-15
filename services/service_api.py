@@ -43,7 +43,7 @@ class ServiceApi:
                 logging.error("Request could not be authenticated.")
                 return "Request could not be authenticated."
             else:
-                llogging.error("An error occurred with status code: %s and payload %s", response.status_code, response.content)
+                logging.error("An error occurred with status code: %s and payload %s", response.status_code, response.content)
                 return "An error occurred."
         except requests.RequestException as e:
             logging.error("Network error occurred: %s", str(e))
