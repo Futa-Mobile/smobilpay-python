@@ -20,3 +20,4 @@ class PaymentStatusModel:
     payItemId: str
     payItemDescr: str
     errorCode: int
+    tag: str

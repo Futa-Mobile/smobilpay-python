@@ -20,13 +20,13 @@ class PaymentHistoryService:
         params = {}
         if timestamp_from:
             try:
-                params['timestamp_from'] = timestamp_from.isoformat()
+                params['timestamp_from'] = timestamp_from
             except AttributeError:
                 logging.error("Invalid type for timestamp_from. It must be a datetime object.")
                 return "Invalid timestamp_from provided."
         if timestamp_to:
             try:
-                params['timestamp_to'] = timestamp_to.isoformat()
+                params['timestamp_to'] = timestamp_to
             except AttributeError:
                 logging.error("Invalid type for timestamp_to. It must be a datetime object.")
                 return "Invalid timestamp_to provided."
