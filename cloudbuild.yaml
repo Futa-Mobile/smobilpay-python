@@ -24,6 +24,7 @@ steps:
       - "europe-west1"
       - "--platform"
       - "managed"
+      - "--allow-unauthenticated" # Added this line to make the service public
     # Deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
