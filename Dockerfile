@@ -23,3 +23,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Non-root user setup: create a user 'camoo' and switch to it
 RUN adduser --disabled-password --gecos "" camoo
 USER camoo
+
+# Expose the port your app will listen on (default for many web apps is 8080)
+EXPOSE 5001
+
+# Define the command to run your application
+CMD ["python", "app.py"]

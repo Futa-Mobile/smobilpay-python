@@ -118,3 +118,50 @@ Class | Method                                                                  
  - [Service](docs/Model/Service.md)
  - [Subscription](docs/Model/Subscription.md)
  - [Topup](docs/Model/Topup.md)
+
+
+Testing Your Endpoints:
+
+Open your web browser or use a tool like curl or Postman.
+Test the /api/ping endpoint:
+URL: http://127.0.0.1:5000/api/ping
+Expected Response (Success):
+ json 
+{
+  "key": "some_key",
+  "nonce": "some_nonce",
+  "status": "success",
+  "time": "2023-10-27T10:00:00Z",
+  "version": "3.0.0"
+}
+Expected Response (Error):
+ json 
+{
+  "message": "Ping to Smobilpay API failed",
+  "status": "error"
+}
+Test the /api/account endpoint:
+URL: http://127.0.0.1:5000/api/account
+Expected Response (Success):
+ json 
+{
+  "balance": 1000.00,
+  "currency": "XAF",
+  "status": "success"
+}
+Expected Response (Error):
+ json 
+{
+  "message": "Failed to fetch account information",
+  "status": "error"
+}
+If you visit the terminal you will see the log messages.
+7. Extending with Other Endpoints:
+
+To add more endpoints:
+Refer to the "Documentation for API Endpoints" in README.md.
+Create a new route (e.g., /api/bills).
+Import the relevant service class (e.g., BillService).
+Create an instance of the service.
+Call the appropriate method (e.g., fetch_bills).
+Handle the response and return JSON.
