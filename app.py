@@ -8,7 +8,8 @@ from models.account_model import AccountModel
 from models.ping_model import PingModel
 from services.account_service import AccountService
 from services.ping_service import PingService
-
+from services.transaction_service import TransactionService
+from services.cashin_service import CashinService
 # Load environment variables
 load_dotenv()
 
@@ -20,6 +21,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # Initialize services
 ping_service = PingService()
 account_service = AccountService()
+transaction_service = TransactionService()
+cashin_service = CashinService()
 
 # Routes
 @app.route('/api/ping', methods=['GET'])
@@ -61,6 +64,24 @@ def get_account_info():
      else:
          logging.error(f"Failed to fetch account information: {account_info}")
          return jsonify({"status": "error", "message": "Failed to fetch account information"}), 500
+
+@app.route('/api/cashin', methods=['POST'])
+def create_cashin():
+    """
+    Create and process a new cashin request.
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"status": "error", "message": "Invalid request format"}), 400
+        result = cashin_service.process_cashin(data)
+        if result['status'] == 'success':
+            return jsonify(result), 201
+        else:
+            return jsonify(result), 400
+    except Exception as e:
+        logging.error(f"Error processing cashin request: {str(e)}")
+        return jsonify({"status": "error", "message": "An error occurred while processing the cashin"}), 500
 
 @app.errorhandler(500)
 def internal_server_error(e):

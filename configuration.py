@@ -18,7 +18,7 @@ class Configuration:
         # Setting up configurations from environment variables
         self.live_mode = os.getenv('SMOBIL_PAY_LIVE_MODE', 'True').lower() == 'true'
         self.base_url = os.getenv('SMOBIL_PAY_API_URL_STAGING') if not self.live_mode else os.getenv('SMOBIL_PAY_API_URL')
-        self.api_version = os.getenv('SMOBIL_PAY_API_VERSION', '3.0.0')
+        self.api_version = os.getenv('SMOBIL_PAY_API_VERSION', '3.0.5')
 
         # Log the mode of operation and debug status
         logging.info(f"Configuration initialized in {'live' if self.live_mode else 'staging'} mode.")

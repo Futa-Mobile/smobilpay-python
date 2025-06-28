@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.8-slim
+FROM python:3.8-slim-buster
 
 # Install git and cleanup in one layer for efficiency
 RUN apt-get update && \

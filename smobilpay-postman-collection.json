@@ -1,0 +1,79 @@
+{
+ "info": {
+  "_postman_id": "a8f01778-4885-4348-9a34-7021d3802917",
+  "name": "Smobilpay API",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+ },
+ "item": [
+  {
+   "name": "Ping",
+   "request": {
+    "method": "GET",
+    "header": [],
+    "url": {
+     "raw": "{{baseUrl}}/api/ping",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "ping"
+     ]
+    }
+   },
+   "response": []
+  },
+  {
+   "name": "Get Account Info",
+   "request": {
+    "method": "GET",
+    "header": [],
+    "url": {
+     "raw": "{{baseUrl}}/api/account",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "account"
+     ]
+    }
+   },
+   "response": []
+  },
+  {
+   "name": "Create Cashin",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Content-Type",
+      "value": "application/json",
+      "type": "text"
+     }
+    ],
+    "body": {
+     "mode": "raw",
+     "raw": "{\n    \"amount\": 1000,\n    \"service_code\": \"MTN_CG\",\n    \"recipient_number\": \"237670000000\",\n    \"customer_name\": \"John Doe\",\n    \"customer_email\": \"johndoe@example.com\"\n}"
+    },
+    "url": {
+     "raw": "{{baseUrl}}/api/cashin",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "cashin"
+     ]
+    }
+   },
+   "response": []
+  }
+ ],
+ "variable": [
+  {
+   "key": "baseUrl",
+   "value": "http://localhost:5001"
+  }
+ ]
+}
