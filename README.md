@@ -99,6 +99,17 @@ Class | Method                                                                  
 *PaymentHistoryService* | [**fetch_payment_history**](docs/Api/VerifyApi.md#historystdget)                | **GET** /historystd | Retrieve list of historic payment collection.
 *PaymentStatusService* | [**fetch_payment_status**](docs/Api/VerifyApi.md#verifytxget)                    | **GET** /verifytx | Get the current payment collection status
 
+## Flask API Endpoints
+
+The Flask application provides REST API endpoints for easy integration:
+
+Endpoint | Method | Description | Parameters
+---------|--------|-------------|------------
+`/api/ping` | GET | Check API availability | None
+`/api/account` | GET | Get account information | None
+`/api/cashin` | POST | Create cashin transaction | JSON payload
+`/api/verifytx` | GET | Check transaction status | `ptn` or `trid` (query parameters)
+
 ## Documentation For Models
 
  - [Account](docs/Model/Account.md)
@@ -124,7 +135,7 @@ Testing Your Endpoints:
 
 Open your web browser or use a tool like curl or Postman.
 Test the /api/ping endpoint:
-URL: http://127.0.0.1:5000/api/ping
+URL: http://127.0.0.1:5001/api/ping
 Expected Response (Success):
  json 
 {
@@ -141,7 +152,7 @@ Expected Response (Error):
   "status": "error"
 }
 Test the /api/account endpoint:
-URL: http://127.0.0.1:5000/api/account
+URL: http://127.0.0.1:5001/api/account
 Expected Response (Success):
  json 
 {
@@ -155,6 +166,38 @@ Expected Response (Error):
   "message": "Failed to fetch account information",
   "status": "error"
 }
+
+Test the /api/verifytx endpoint:
+URL: http://127.0.0.1:5001/api/verifytx?ptn=1234567890
+Expected Response (Success):
+ json 
+{
+  "status": "success",
+  "message": "Transaction status retrieved successfully",
+  "data": [
+    {
+      "ptn": "1234567890",
+      "status": "SUCCESS",
+      "merchant": "merchant_code",
+      "priceLocalCur": 1000.00,
+      "localCur": "XAF",
+      "receiptNumber": "REC123456",
+      "veriCode": "VER789"
+    }
+  ]
+}
+Expected Response (Error - Missing Parameters):
+ json 
+{
+  "status": "error",
+  "message": "Either 'ptn' (Payment Transaction Number) or 'trid' (Transaction Reference ID) must be provided"
+}
+
+You can also test using the provided test script:
+```bash
+python test_verifytx.py
+```
+
 If you visit the terminal you will see the log messages.
 7. Extending with Other Endpoints:
 

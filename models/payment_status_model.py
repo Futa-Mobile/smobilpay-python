@@ -1,15 +1,16 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
 
 @dataclass
 class PaymentStatusModel:
     ptn: str
     serviceid: str
     merchant: str
-    timestamp: datetime
+    timestamp: Optional[datetime]
     receiptNumber: str
     veriCode: str
-    clearingDate: datetime
+    clearingDate: Optional[datetime]
     trid: str
     priceLocalCur: float
     priceSystemCur: float
